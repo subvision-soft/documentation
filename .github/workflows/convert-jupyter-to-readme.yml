@@ -2,12 +2,7 @@ name: Convert Jupyter to Markdown
 on:
   push:
     branches:
-      - develop
-      - master
-  pull_request:
-    branches:
-      - develop
-      - master
+      - main
 jobs:
   convert-jupyter-to-readme:
     runs-on: ubuntu-latest
