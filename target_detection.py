@@ -327,9 +327,8 @@ def get_target_ellipse(mat,zone:Zone):
     # remove impacts from the mask
     cv2.bitwise_and(value_mask, cv2.bitwise_not(impacts), value_mask)
 
-    close = cv2.morphologyEx(value_mask, cv2.MORPH_CLOSE, kernel)
-    close = cv2.morphologyEx(close, cv2.MORPH_OPEN, kernel)
-
+    close = cv2.morphologyEx(value_mask, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5)))
+    close = cv2.morphologyEx(close, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5)))
     contours, _ = cv2.findContours(close, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     biggest_contour = max(contours, key=cv2.contourArea)
     ellipse = cv2.fitEllipse(biggest_contour)
@@ -478,10 +477,11 @@ sheet_mat, coordinates = process_image(image)
 if sheet_mat is not None:
     plt.imshow(sheet_mat)
     plt.show()
+cv2.waitKey()
 
-cap = cv2.VideoCapture("./test.mkv")
+cap = cv2.VideoCapture("./test.mp4")
 while not cap.isOpened():
-    cap = cv2.VideoCapture("./test.mkv")
+    cap = cv2.VideoCapture("./test.mp4")
     cv2.waitKey(1000)
     print("Wait for the header")
 
